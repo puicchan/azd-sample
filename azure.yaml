@@ -6,7 +6,7 @@ metadata:
 
 services:
   lga:
-    project: ./src
+    project: ./src/wf-echo
     dist: build
     language: js
     host: appservice
