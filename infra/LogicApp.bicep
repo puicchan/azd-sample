@@ -15,19 +15,21 @@
   'prod'
 ])
 param deploymentEnvironment string
-
+param serviceName string = 'lga'
 param uniqueSuffix string
 
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
 param workloadName string = 'schemaGen'
-
+param environmentName string
 param managementbaseuri string = environment().resourceManager
 
 var LogicAppPlan_name = '${workloadName}-WorkflowPlan-${uniqueSuffix}-${deploymentEnvironment}'
 var LogicApp_Name = '${workloadName}-${uniqueSuffix}-${deploymentEnvironment}'
 var prelim_LogicAppStorageName = replace(toLower('${workloadName}${uniqueSuffix}${deploymentEnvironment}'),'-','')
+
+var tags = { 'azd-env-name': environmentName }
 
 //substring will fail if the string isn't long enough, so need to test to see if needed
 var LogicApp_Storage_Name = (length(prelim_LogicAppStorageName)<24 ? prelim_LogicAppStorageName :substring(prelim_LogicAppStorageName,0,23))
@@ -35,6 +37,7 @@ var LogicApp_Storage_Name = (length(prelim_LogicAppStorageName)<24 ? prelim_Logi
 resource storageAccounts_WorkflowPlanStorage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: LogicApp_Storage_Name
   location: location
+  tags: union(tags, { 'azd-service-name': serviceName })
   sku: {
     name: 'Standard_LRS'
   }
@@ -56,6 +59,7 @@ resource storageAccounts_WorkflowPlanStorage 'Microsoft.Storage/storageAccounts@
       }
       keySource:'Microsoft.Storage'
     }
+
   }
 }
 //Build the storage account connection string
@@ -66,6 +70,7 @@ var storageprimaryConnStr = 'DefaultEndpointsProtocol=https;AccountName=${LogicA
 resource workflowplan_serverfarms 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: LogicAppPlan_name
   location: location
+  tags: union(tags, { 'azd-service-name': serviceName })
   sku: {
     name: 'WS1'
     tier: 'WorkflowStandard'
@@ -91,6 +96,7 @@ resource workflowplan_serverfarms 'Microsoft.Web/serverfarms@2022-03-01' = {
 resource sites_schemagen_name_resource 'Microsoft.Web/sites@2022-03-01' = {
   name: LogicApp_Name
   location: location
+  tags: union(tags, { 'azd-service-name': serviceName })
   kind: 'functionapp,workflowapp'
   identity: {
     type: 'SystemAssigned'
