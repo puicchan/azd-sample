@@ -41,6 +41,7 @@ module LogicAppDeploy 'LogicApp.bicep' = {
     uniqueSuffix: uniqueSuffix
     location: location
     workloadName: workloadName
+    environmentName:environmentName
   }
 }
 
