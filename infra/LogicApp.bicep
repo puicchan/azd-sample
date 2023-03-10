@@ -37,7 +37,7 @@ var LogicApp_Storage_Name = (length(prelim_LogicAppStorageName)<24 ? prelim_Logi
 resource storageAccounts_WorkflowPlanStorage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: LogicApp_Storage_Name
   location: location
-  tags: union(tags, { 'azd-service-name': serviceName })
+  //tags: union(tags, { 'azd-service-name': serviceName })
   sku: {
     name: 'Standard_LRS'
   }
@@ -70,7 +70,7 @@ var storageprimaryConnStr = 'DefaultEndpointsProtocol=https;AccountName=${LogicA
 resource workflowplan_serverfarms 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: LogicAppPlan_name
   location: location
-  tags: union(tags, { 'azd-service-name': serviceName })
+  //tags: union(tags, { 'azd-service-name': serviceName })
   sku: {
     name: 'WS1'
     tier: 'WorkflowStandard'
