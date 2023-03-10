@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: azd-sample-logicapps
+metadata:
+  template: azd-sample-logicapps@0.0.1-beta
+
+services:
+  lga:
+    project: ./src
+    dist: build
+    language: js
+    host: appservice
+    
+pipeline: 
+  provider: github
+
+infra:
+  provider: bicep
