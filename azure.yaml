@@ -6,10 +6,10 @@ metadata:
 
 services:
   lga:
-    project: ./src/wf-echo
     dist: build
     language: js
     host: appservice
+    yaml: ./github/workflows/deploy-application.yml
     
 pipeline: 
   provider: github
