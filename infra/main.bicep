@@ -4,6 +4,7 @@ targetScope = 'subscription'
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
 param environmentName string
+param deploymentEnvironment string
 
 @minLength(1)
 @description('Primary location for all resources')
@@ -30,14 +31,14 @@ var resourceSuffix = '${workloadName}-${environmentName}'
 resource RG 'Microsoft.Resources/resourceGroups@2022-09-01' ={
   name: resourceGroupName
   location: location
-  tags: union(tags, { 'azd-service-name': serviceName })
+  tags: tags
 }
 
 module LogicAppDeploy 'LogicApp.bicep' = {
   name: 'LogicAppDeploy'
   scope: resourceGroup(RG.name)
   params:{
-    deploymentEnvironment: environmentName
+    deploymentEnvironment: deploymentEnvironment
     uniqueSuffix: uniqueSuffix
     location: location
     workloadName: workloadName

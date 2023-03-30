@@ -6,13 +6,6 @@ metadata:
 
 services:
   lga:
-    dist: build
-    language: js
-    host: appservice
-    yaml: ./github/workflows/deploy-application.yml
-    
-pipeline: 
-  provider: github
-
-infra:
-  provider: bicep
+    project: ./src
+    language: python
+    host: function
